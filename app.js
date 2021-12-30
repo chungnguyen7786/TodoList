@@ -1,4 +1,5 @@
 const express = require("express");
+const date = require("./date");
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -7,19 +8,13 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.set("views", `${__dirname}/views`);
 
-let taskList = ["Go shopping", "Send contract"];
-let workList = ["Send contract"];
+const taskList = ["Go shopping", "Send contract"];
+const workList = ["Send contract"];
 let path = "";
 
 app.get("/", (req, res) => {
-  const today = new Date();
-  const option = {
-    weekday: "long",
-    day: "numeric",
-    month: "short",
-    // year: "numeric",
-  };
-  const day = today.toLocaleString("en-Us", option);
+  const day = date.getDate();
+  // const day = date.getDay();
   path = "/";
   res.render("./list", { heading: day, list: taskList, path });
 });
