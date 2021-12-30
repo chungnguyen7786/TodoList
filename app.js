@@ -7,7 +7,9 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.set("views", `${__dirname}/views`);
 
-var taskList = ["Buy food", "Cook food", "Eat food"];
+let taskList = ["Go shopping", "Send contract"];
+let workList = ["Send contract"];
+let path = "";
 
 app.get("/", (req, res) => {
   const today = new Date();
@@ -18,13 +20,26 @@ app.get("/", (req, res) => {
     // year: "numeric",
   };
   const day = today.toLocaleString("en-Us", option);
-  res.render("./list", { day, taskList });
+  path = "/";
+  res.render("./list", { heading: day, list: taskList, path });
 });
 
 app.post("/", (req, res) => {
   const newTask = req.body.task;
   taskList.push(newTask);
   res.redirect("/");
+});
+
+app.get("/work", (req, res) => {
+  path = "/work";
+  res.render("./list", { heading: "Work List", list: workList, path });
+});
+
+app.post("/work", (req, res) => {
+  const newTask = req.body.task;
+  taskList.push(newTask);
+  workList.push(newTask);
+  res.redirect("/work");
 });
 
 const port = 3000;
