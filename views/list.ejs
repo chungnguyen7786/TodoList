@@ -5,16 +5,42 @@
   </h1>
 </div>
 <div class="box">
-  <%for(var i=0; i<list.length; i++) { %>
+  <%todoList.forEach( (item) => {%>
   <div class="item">
-    <input type="checkbox">
-    <p><%= list[i] %></p>
+    <form class="check-item" action="/check" method="post">
+      <input type="checkbox" <%=item.checked%> name="check" onChange="this.form.submit()" />
+      <p><%= item.task %></p>
+      <input type="hidden" name="id" value="<%=item._id%>">
+      <input type="hidden" name="path" value=<%=path%>>
+    </form>
+    <form class="delete-item" action="/delete" method="post">
+      <input type="hidden" name="id" value="<%=item._id%>">
+      <button class="delete" type="submit" name="path" value=<%=path%>>
+        <i class="fas fa-trash"></i>
+      </button>
+    </form>
   </div>
-  <%}%>
-    
-    <form class="item" action=<%= path %> method="post">
-  <input type="text" id="task" name="task" placeholder="New Item" autocomplete="off" />
-  <button type="submit">+</button>
+  <%})%>
+
+  <form class="add-item" action="/" method="post">
+    <input type="text" id="task" name="task" placeholder="New Item" autocomplete="off" />
+    <button class="add" type="submit" name="path" value=<%=path%>>+</button>
+  </form>
+</div>
+<div class="box">
+  <h2 id="custom-list">Custom List</h2>
+  <%taskList.forEach( (item) => {%>
+  <div class="item">
+    <% if (item.name==="General") { %>
+    <p><a href="/"><%= item.name %></a></p>
+    <% } else { %>
+    <p><a href="/category/<%=_.kebabCase(_.lowerCase(item.name))%>"><%= item.name %></a></p>
+    <% } %>
+  </div>
+  <%})%>
+  <form class="add-item" action="/list" method="post">
+    <input type="text" id="list" name="list" placeholder="New List" autocomplete="off" />
+    <button class="delete" type="submit" name="path" value=<%=path%>><i class="far fa-plus-square"></i></button>
   </form>
 </div>
 <%- include("footer") -%>
