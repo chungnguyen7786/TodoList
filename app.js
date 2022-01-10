@@ -1,6 +1,7 @@
 const express = require("express");
 const date = require("./date");
 const _ = require("lodash");
+require("dotenv").config();
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -12,7 +13,7 @@ app.locals._ = _;
 
 const mongoose = require("mongoose");
 mongoose
-  .connect("mongodb://localhost:27017/todosDB")
+  .connect(process.env.MONGO_URL)
   .then(() => console.log("MongoDB connected!"))
   .catch((error) => console.error(error));
 
